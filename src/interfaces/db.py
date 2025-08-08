@@ -52,3 +52,5 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
         timestamp=timestamp,
     ))
 
+def readLogs():
+    return logs.all() # pyright: ignore[reportOptionalMemberAccess]
