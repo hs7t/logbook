@@ -1,6 +1,7 @@
+import subcommands.config
 import typer
+
 from rich.console import Console
-from pathlib import Path
 from typing_extensions import Annotated
 from typing import List, Tuple, Optional
 
@@ -16,21 +17,7 @@ def main(ctx: typer.Context):
     console.print("[blue]logbook[/blue]")
     console.print("Try running --help!")
 
-@app.command()
-def write(streak: str):
-    console.print("I should print something!")
-
-@app.command()
-def read(
-    tags: Annotated[Optional[List[str]], typer.Option(
-        "-t", "--tag", help="A tag to look for in logs"
-    )] = None,
-):  
-    console.print(tags)
-
-@app.command()
-def config():
-    console.print("This should do something")
+app.add_typer(subcommands.config.app, name="config")
 
 if __name__ == "__main__":
     app()

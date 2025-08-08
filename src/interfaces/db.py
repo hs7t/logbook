@@ -18,4 +18,19 @@ tags = db['tags']
 logs = db['logs']
 
 def createTag(tag_name):
-    tags.insert(dict(id=tag_name))
+    tags.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
+        name=tag_name,
+    ))
+
+def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
+    """
+    Writes a log to the database.
+        body: text (str)
+        timestamp: iso 8601 formatted timestamp (str)
+        tag: tag in db['tags']
+    """
+    logs.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
+        body=body,
+        tag=tag,
+        timestamp=timestamp,
+    ))
