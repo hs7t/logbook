@@ -2,6 +2,7 @@ import sqlite3
 import dataset
 import os
 from pathlib import Path
+from typing import Any
 
 def makeAppFolder(path=(Path.home() / '.logbook')):
     appFolder = path.resolve()
@@ -17,14 +18,26 @@ db = dataset.connect(f'sqlite:///{appFolder}/logbook.db')
 tags = db['tags']
 logs = db['logs']
 
-def createTag(tag_name):
+def createTag(name, kind = 'static', cadence = None):
     """
     Creates a tag reference.
         tag_name (str)
     """
-    tags.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
-        name=tag_name,
-    ))
+
+    props: dict[str, Any] = dict( # typedef because pylance complains otherwise
+        name = name,
+        kind = kind
+    )
+
+    if kind == 'stateful':
+        props['state'] = 0
+
+    if cadence is not None:
+        tags.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
+            name=name,
+            kind=kind,
+            state=0,
+        ))
 
 def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
     """
@@ -38,3 +51,4 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
         tag=tag,
         timestamp=timestamp,
     ))
+
