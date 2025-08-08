@@ -10,4 +10,4 @@ app = typer.Typer()
 def tag(
     name: str = typer.Argument(help="A tag name"), 
 ):
-    createTag(name)
+    createTag(name, 'static')
