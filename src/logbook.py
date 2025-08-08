@@ -1,4 +1,4 @@
-import subcommands.config
+import subcommands.config, subcommands.write
 import typer
 
 from rich.console import Console
@@ -18,6 +18,7 @@ def main(ctx: typer.Context):
     console.print("Try running --help!")
 
 app.add_typer(subcommands.config.app, name="config")
+app.add_typer(subcommands.write.app, name="config")
 
 if __name__ == "__main__":
     app()
