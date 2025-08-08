@@ -2,7 +2,7 @@ import subcommands.config
 import typer
 from rich.console import Console
 
-from interfaces.db import writeLog, readLogs
+from interfaces.db import writeLog, fetchLogs
 from utilities.timekeeping import getCurrentUTC, isoTimeString
 from typing_extensions import Annotated
 from typing import List
@@ -36,7 +36,7 @@ def read(
     amount: int = typer.Argument(10, help="The amount of logs to show"),
     tag: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
-    for log in readLogs():
+    for log in fetchLogs():
         console.print(log)
     
 

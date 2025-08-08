@@ -28,16 +28,12 @@ def createTag(name, kind = 'static', cadence = None):
         name = name,
         kind = kind
     )
-
     if kind == 'stateful':
         props['state'] = 0
+    if cadence != None:
+        props['cadence'] = cadence
 
-    if cadence is not None:
-        tags.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
-            name=name,
-            kind=kind,
-            state=0,
-        ))
+    tags.insert(props) # pyright: ignore[reportOptionalMemberAccess]
 
 def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
     """
@@ -52,5 +48,14 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
         timestamp=timestamp,
     ))
 
-def readLogs():
+def fetchLogs():
     return logs.all() # pyright: ignore[reportOptionalMemberAccess]
+
+def fetchLogsObject():
+    return logs
+
+def deleteLogs(query: dict):
+    logs.delete(dict) # pyright: ignore[reportOptionalMemberAccess]
+
+def deleteTag(tag):
+    tags.delete(name = tag) # pyright: ignore[reportOptionalMemberAccess]
