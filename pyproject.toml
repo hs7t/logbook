@@ -1,0 +1,20 @@
+[project]
+name = "logbook"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Ali",email = "125828096+hs7t@users.noreply.github.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.13,<4"
+dependencies = [
+    "typer (>=0.16.0,<0.17.0)",
+    "rich (>=14.1.0,<15.0.0)",
+    "dataset (>=1.6.2,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
