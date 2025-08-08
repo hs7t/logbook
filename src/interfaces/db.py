@@ -18,6 +18,10 @@ tags = db['tags']
 logs = db['logs']
 
 def createTag(tag_name):
+    """
+    Creates a tag reference.
+        tag_name (str)
+    """
     tags.insert(dict( # pyright: ignore[reportOptionalMemberAccess]
         name=tag_name,
     ))
