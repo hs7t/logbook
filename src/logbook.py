@@ -6,7 +6,8 @@ from rich.table import Table
 from rich.prompt import Confirm
 from rich import box
 
-from interfaces.db import writeLog, fetchLogs, deleteAllLogs, deleteLogsByTag
+from interfaces.db import writeLog, fetchLogs, findLogs, deleteAllLogs, deleteLogsByTag, findTagDefinitions
+import utilities.display as display
 from utilities.timekeeping import getCurrentUTC, isoTimeString
 from typing_extensions import Annotated
 from typing import List
@@ -31,9 +32,17 @@ def write(
 ):
     now = isoTimeString(getCurrentUTC())
     if tag is not None:
+        if len(findTagDefinitions(name=tag)) == 0:
+            if display.confirm("[blue] It looks like that tag doesn't exist. Would you like to create it?", default=True) is True:
+                subcommands.config.tag('create', tag)
+                console.print(f"Created a new tag [blue]{tag}[/blue]")
+            else:
+                raise typer.Exit()
         writeLog(body, timestamp=now, tag=tag)
+        console.print("Wrote your log!")
     else:
         writeLog(body, timestamp=now)
+        console.print("Wrote your log!")
 
 @app.command()
 def delete(
@@ -51,9 +60,14 @@ def delete(
 @app.command()
 def read(
     amount: int = typer.Argument(10, help="The amount of logs to show"),
-    tag: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
+    tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
-    logs = fetchLogs()
+    logs = []
+    if tags is not None:
+        for tag in tags:
+            logs.extend(findLogs(tag=tag))
+    else:
+        logs = fetchLogs()
     table = Table(box=box.ROUNDED)
 
     table.add_column("Timestamp", justify="center", style="bright_yellow", no_wrap=True)
