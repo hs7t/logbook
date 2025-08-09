@@ -22,7 +22,8 @@ def tag(
         createTagDefinition(tag_name, 'static')
 
     if action == 'delete':
-        if len(findTagDefinitions(name = tag_name)) == 0:
+        if len(findTagDefinitions(name=tag_name)) == 0:
+            console.print("[blue]It looks like that tag doesn't exist.[/blue]")
             raise typer.Exit()
 
         if len(findLogs(tag=tag_name)) != 0:
@@ -42,11 +43,11 @@ def tag(
                 if display.confirm("[bold red]All logs related to this tag will be deleted.[/bold red] Are you sure?", default=False) is False:
                     raise typer.Exit()
         else:
-            if typer.confirm("Are you sure you'd like to delete this tag?", default=True) is False:
+            if typer.confirm("[yellow]This tag will be deleted.[/yellow] Are you sure?", default=True) is False:
                 raise typer.Exit()
         
         deleteTagDefinition(tag_name)
-        console.print("Deleted the tag tagName")
+        console.print(f"Deleted the tag {tag_name}")
 
 @app.command()
 def data(
