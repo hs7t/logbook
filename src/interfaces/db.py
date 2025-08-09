@@ -1,18 +1,23 @@
-import sqlite3
-import dataset
-import os
+import sqlite3, dataset
+import os, shutil
 from pathlib import Path
 from typing import Any
 
-def makeAppFolder(path=(Path.home() / '.logbook')):
+def loadAppFolder(path=(Path.home() / '.logbook')):
     appFolder = path.resolve()
     os.makedirs(appFolder, exist_ok=True)
     return appFolder
 
+def resetAppFolder(path=(Path.home() / '.logbook')):
+    appFolder = path.resolve()
+    if os.path.exists(appFolder):
+        shutil.rmtree(appFolder)
+    loadAppFolder(path)
+
 def pathToString(path):
     return path.absolute().as_posix()
 
-appFolder = makeAppFolder()
+appFolder = loadAppFolder()
 db = dataset.connect(f'sqlite:///{appFolder}/logbook.db')
 
 tags = db['tags']
@@ -35,6 +40,18 @@ def createTag(name, kind = 'static', cadence = None):
 
     tags.insert(props) # pyright: ignore[reportOptionalMemberAccess]
 
+def changeLogTags(old_tag: str, new_tag: str):
+    """
+    Changes the tag attribute to a new_tag for all logs using a certain old_tag
+    """
+
+    # I know this is bad code but it's the best workaround :(
+    updateData = dict(tag = old_tag, _tmp = old_tag)
+    logs.update(updateData, ['tag']) # pyright: ignore[reportOptionalMemberAccess]
+
+    updateData = dict(_tmp = old_tag, tag = new_tag)
+    logs.update(updateData, ['_tmp']) # pyright: ignore[reportOptionalMemberAccess]
+
 def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
     """
     Writes a log to the database.
@@ -47,6 +64,9 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
         tag=tag,
         timestamp=timestamp,
     ))
+
+def deleteLogsByTag(tag):
+    logs.delete(tag=tag) # pyright: ignore[reportOptionalMemberAccess]
 
 def fetchLogs():
     return logs.all() # pyright: ignore[reportOptionalMemberAccess]
