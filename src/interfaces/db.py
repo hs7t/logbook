@@ -23,10 +23,12 @@ db = dataset.connect(f'sqlite:///{appFolder}/logbook.db')
 tags = db['tags']
 logs = db['logs']
 
-def createTag(name, kind = 'static', cadence = None):
+# Tags
+
+def createTagDefinition(name, kind = 'static', cadence = None):
     """
     Creates a tag reference.
-        tag_name (str)
+        name: the name for the tag (str)
     """
 
     props: dict[str, Any] = dict( # typedef because pylance complains otherwise
@@ -40,17 +42,13 @@ def createTag(name, kind = 'static', cadence = None):
 
     tags.insert(props) # pyright: ignore[reportOptionalMemberAccess]
 
-def changeLogTags(old_tag: str, new_tag: str):
-    """
-    Changes the tag attribute to a new_tag for all logs using a certain old_tag
-    """
+def deleteTagDefinition(tag):
+    tags.delete(name = tag) # pyright: ignore[reportOptionalMemberAccess]
 
-    # I know this is bad code but it's the best workaround :(
-    updateData = dict(tag = old_tag, _tmp = old_tag)
-    logs.update(updateData, ['tag']) # pyright: ignore[reportOptionalMemberAccess]
+def findTagDefinitions(*args, **kwargs):
+    return [match for match in logs.find(*args, **kwargs)] # pyright: ignore[reportOptionalMemberAccess]
 
-    updateData = dict(_tmp = old_tag, tag = new_tag)
-    logs.update(updateData, ['_tmp']) # pyright: ignore[reportOptionalMemberAccess]
+# Logs
 
 def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
     """
@@ -65,6 +63,9 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
         timestamp=timestamp,
     ))
 
+def deleteAllLogs():
+    logs.delete() # pyright: ignore[reportOptionalMemberAccess]
+
 def deleteLogsByTag(tag):
     logs.delete(tag=tag) # pyright: ignore[reportOptionalMemberAccess]
 
@@ -74,8 +75,17 @@ def fetchLogs():
 def fetchLogsObject():
     return logs
 
-def deleteLogs(query: dict):
-    logs.delete(dict) # pyright: ignore[reportOptionalMemberAccess]
+def findLogs(*args, **kwargs):
+    return [match for match in logs.find(*args, **kwargs)] # pyright: ignore[reportOptionalMemberAccess]
 
-def deleteTag(tag):
-    tags.delete(name = tag) # pyright: ignore[reportOptionalMemberAccess]
+def changeLogTags(old_tag: str, new_tag: str):
+    """
+    Changes the tag attribute to a new_tag for all logs using a certain old_tag
+    """
+
+    # I know this is bad code but it's the best workaround :(
+    updateData = dict(tag = old_tag, _tmp = old_tag)
+    logs.update(updateData, ['tag']) # pyright: ignore[reportOptionalMemberAccess]
+
+    updateData = dict(_tmp = old_tag, tag = new_tag)
+    logs.update(updateData, ['_tmp']) # pyright: ignore[reportOptionalMemberAccess]
