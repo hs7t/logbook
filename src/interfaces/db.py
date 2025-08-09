@@ -45,8 +45,9 @@ def createTagDefinition(name, kind = 'static', cadence = None):
 def deleteTagDefinition(tag):
     tags.delete(name = tag) # pyright: ignore[reportOptionalMemberAccess]
 
-def findTagDefinitions(*args, **kwargs):
-    return [match for match in logs.find(*args, **kwargs)] # pyright: ignore[reportOptionalMemberAccess]
+def findTagDefinitions(**kwargs):
+    return [match for match in tags.find(**kwargs)] # pyright: ignore[reportOptionalMemberAccess]
+    
 
 # Logs
 
