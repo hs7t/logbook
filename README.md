@@ -15,15 +15,15 @@ Binaries are available for three platforms:
 - for Linux (x86-64 / arm64): `logbook-linux-[x86_64 or arm64]`
 
 > [!TIP]
-> **Don't know what x86_64 or arm64 mean?** If you're running Windows or Linux, your
-  device is most likely to work with the x86_64 binary. If you're on an Apple Silicon 
-  (M1, M2, M3...) Mac, choose the arm64 binary.
+> **Don't know what `x86_64` or `arm64` mean?** If you're running Windows or Linux, your
+  device is most likely to work with the `x86_64` binary. If you're on an Apple Silicon 
+  (M1, M2, M3...) Mac, choose the `arm64` binary.
 
 > [!IMPORTANT]
 > **If you're using Linux or Mac:** Before you can use logbook, you have to mark the 
   binary you just downloaded as an executable. From your terminal, run this command:
   ```bash
-  chmod +x binary-name     # for example, logbook-macos-arm64
+  chmod +x BINARY-NAME     # for example, logbook-macos-arm64
   ```
 
 ### 2. Add logbook to your PATH
@@ -34,17 +34,17 @@ This step is optional, but it's recommended as it allows you to use logbook from
 2. Run a command appropriate for your OS:
     - macOS (zsh):
         ```bash
-        export PATH="$PATH:/path/to/stable/folder"
+        export PATH="$PATH:/PATH/TO/STABLE/FOLDER"
         source ~/.zshrc
         ```
     - Linux (bash):
         ```bash
-        export PATH="$PATH:/path/to/stable/folder"
+        export PATH="$PATH:/PATH/TO/STABLE/FOLDER"
         source ~/.bashrc    # or ~/.profile, depending on your shell
         ```
     - Windows (PowerShell)
         ```powershell
-        [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\path\to\stable\folder", "User")
+        [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\PATH\TO\STABLE\FOLDER", "User")
         ```
 > [!TIP]
 > You should rename the binary to `logbook` (or `logbook.exe` on Windows)
