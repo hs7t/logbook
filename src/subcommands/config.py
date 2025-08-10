@@ -1,7 +1,7 @@
 from interfaces.db import createTagDefinition, findTagDefinitions, deleteTagDefinition, findLogs, changeLogTags
 from interfaces.db import resetAppFolder
 import utilities.display as display
-from typing_extensions import Annotated
+from enum import Enum
 
 import typer
 from rich.console import Console
@@ -10,18 +10,27 @@ console = Console()
 
 app = typer.Typer(help="Configure your logbook and other data.")
 
+class TagAction(str, Enum):
+    create = "create",
+    delete = "delete"
+
 @app.command()
 def tag(
-    action: str = typer.Argument(help="An action to take (create/delete)"), 
+    action: TagAction = typer.Argument(help="An action to take"), 
     tag_name: str = typer.Argument(help="A tag name"), 
 ):
     """
     Configure tags.
     """
-    if action == 'create':
-        createTagDefinition(tag_name, 'static')
 
-    if action == 'delete':
+    if action == TagAction.create:
+        if len(findTagDefinitions(name=tag_name)) == 0:
+            createTagDefinition(tag_name, 'static')
+            console.print(f"Tag {tag_name} created!")
+        else:
+            console.print(f"That tag, {tag_name}, already exists.")
+
+    if action == TagAction.delete:
         if len(findTagDefinitions(name=tag_name)) == 0:
             console.print("[blue]It looks like that tag doesn't exist.[/blue]")
             raise typer.Exit()
@@ -49,14 +58,17 @@ def tag(
         deleteTagDefinition(tag_name)
         console.print(f"Deleted the tag {tag_name}")
 
+class DataAction(str, Enum):
+    delete = "delete"
+
 @app.command()
 def data(
-    action: str = typer.Argument(help="An action to take (reset)"), 
+    action: DataAction = typer.Argument(help="An action to take (reset)"), 
 ):
     """
     Manage your app data.
     """
-    if action == 'reset':
+    if action == DataAction.delete:
         if typer.confirm("This will reset everything in your data folder, including your preferences and logbook. Are you sure?", default=False):
             resetAppFolder()
             console.print("Reset your logbook data folder.")

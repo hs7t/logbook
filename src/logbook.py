@@ -1,4 +1,5 @@
 import subcommands.config, subcommands.read
+from subcommands.config import TagAction
 import typer
 
 from rich.console import Console
@@ -34,7 +35,7 @@ def write(
     if tag is not None:
         if len(findTagDefinitions(name=tag)) == 0:
             if display.confirm("[blue] It looks like that tag doesn't exist. Would you like to create it?", default=True) is True:
-                subcommands.config.tag('create', tag)
+                subcommands.config.tag(TagAction.create, tag)
                 console.print(f"Created a new tag [blue]{tag}[/blue]")
             else:
                 raise typer.Exit()
