@@ -58,6 +58,7 @@ def logs(
         table.add_column("Time (YYYY-MM-DD)", justify="center", no_wrap=True)
         table.add_column("Text", justify="center", style="bright_green", no_wrap=False)
         table.add_column("Tag", justify="center")
+        # TODO: add 'state' column
 
         task_processing = progress.add_task("Making a neat table...", total=len(outputLogs))
         for log in outputLogs:
