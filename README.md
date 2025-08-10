@@ -3,7 +3,7 @@
 logbook is simple CLI software that lets you log and tag events - as if you were 
 a computer!
 
-## Installing logbook to your computer
+## Installing logbook
 
 ### 1. Download it
 
