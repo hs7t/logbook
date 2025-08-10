@@ -12,7 +12,7 @@ from typing_extensions import Annotated
 from typing import List
 
 console = Console()
-app = typer.Typer(help="Configure your logbook and other data.")
+app = typer.Typer(help="Read your logbook.")
 
 @app.command()
 def logs(
@@ -20,6 +20,8 @@ def logs(
     tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
     descending: Annotated[bool, typer.Option("-d/-a", "--descending/ascending", help="Whether to order logs in descending order")] = True 
 ):
+    """Read logs in your logbook."""
+
     logs = []
     if tags is not None:
         for tag in tags:
@@ -45,6 +47,7 @@ def logs(
 
 @app.command()
 def tags():
+    """Read tags in your logbook."""
     tagDefs = fetchTagDefinitions()
 
     tagNames = [definition['name'] for definition in tagDefs]
