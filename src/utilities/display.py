@@ -22,7 +22,7 @@ def prompt(text, default=None, fade=True):
     response = Prompt.ask(text, default=default)
     return response
 
-def confirm(text, default=False, fade = False):
+def confirm(text, default=False, fade = True):
     if fade == True:
         style = NotificationStyle.waffle
         text = f"[{style}]{text}[{style}]"
