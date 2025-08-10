@@ -7,6 +7,7 @@ from rich import box
 
 from interfaces.db import fetchLogs, findLogs, fetchTagDefinitions
 import utilities.timekeeping as tk
+import utilities.misc as misc
 from typing_extensions import Annotated
 from typing import List
 
@@ -79,6 +80,7 @@ def tags():
 
     table.add_column("Tag", justify="center", style="bright_green")
     table.add_column("Last logged (Y-M-D)")
+    table.add_column("State")
 
     for tagName in tagNames:
         matches = findLogs(tag=tagName)
@@ -86,9 +88,15 @@ def tags():
         loggedTimes.sort(reverse=True)
 
         lastTimeString = "-"
-        if loggedTimes[0]:
+        if loggedTimes:
             lastTimeString = tk.makeTimeString(tk.convertToTimeZone(loggedTimes[0], tk.getLocalTimeZone()), "%Y-%m-%d")
         
-        table.add_row(tagName, lastTimeString)
+        state = misc.calculateState(matches)
+        if state == 0:
+            stateString = "-"
+        else:
+            stateString = str(state)
+
+        table.add_row(tagName, lastTimeString, stateString)
     
     console.print(table)
