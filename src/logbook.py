@@ -1,7 +1,8 @@
-import subcommands.config, subcommands.read, subcommands.subcommands.config.tag
+import subcommands.config, subcommands.read
+import utilities.misc as misc
 import typer
 
-from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions, TagKind
+from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions, createTagDefinition, TagKind
 import utilities.display as display
 from utilities.display import NotificationStyle
 import utilities.timekeeping as tk
@@ -18,10 +19,10 @@ def main(ctx: typer.Context):
     display.notify("logbook", NotificationStyle.waffle)
     display.notify("Try running --help!", NotificationStyle.hint)
 
-@app.command()
+@app.command(context_settings={"ignore_unknown_options": True})
 def write(
     body: str = typer.Argument(help="Text for your log"),
-    modifier: Annotated[int|None, typer.Argument(help="A modifier for a tag state")] = None,
+    modifier: Annotated[int|None, typer.Argument(help="A modifier for a tag state", allow_dash=True)] = None,
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
     """Write logs to your logbook."""
@@ -33,16 +34,19 @@ def write(
             display.notify("It looks like that tag doesn't exist.")
             if display.confirm(f"Would you like to create a new tag named {tag}?", default=True) is True:
                 if modifier is not None:
-                    subcommands.subcommands.config.tag.create(tag, TagKind.stateful)
+                    createTagDefinition(tag, TagKind.stateful)
+                    display.notify(f"Created a new stateful tag named {tag}.", NotificationStyle.assure)
                 else:
-                    subcommands.subcommands.config.tag.create(tag) # TODO: fix this cursedness
-                display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
+                    createTagDefinition(tag)
+                    display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
-        if findTagDefinitions(name='tag', kind=TagKind.stateful.value) and modifier is not None:
+            
+        if misc.hasItems(findTagDefinitions(name=tag, kind=TagKind.stateful.value)) and modifier is not None:
             writeLog(body, timestamp=now, tag=tag, stateModifier=modifier)
         elif modifier is not None:
             display.notify("This tag doesn't support states.") # TODO: handle this case
+            raise typer.Exit()
         else:
             writeLog(body, timestamp=now, tag=tag)
     else:
