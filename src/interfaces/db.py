@@ -28,7 +28,6 @@ logs = db['logs']
 class TagKind(str, Enum):
     static = "static"
     stateful = "stateful"
-    cadenced = "cadenced"
 
 def createTagDefinition(name, kind: TagKind = TagKind.static, cadence = None):
     """
