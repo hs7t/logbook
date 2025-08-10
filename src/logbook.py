@@ -2,19 +2,12 @@ import subcommands.config, subcommands.read
 from subcommands.config import TagAction
 import typer
 
-from rich.console import Console
-from rich.table import Table
-from rich.prompt import Confirm
-from rich import box
-
-from interfaces.db import writeLog, fetchLogs, findLogs, deleteAllLogs, deleteLogsByTag, findTagDefinitions
+from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions
 import utilities.display as display
+from utilities.display import NotificationStyle
 import utilities.timekeeping as tk
 from typing_extensions import Annotated
 from typing import List
-
-
-console = Console()
 
 app = typer.Typer(add_completion = False)
 
@@ -23,8 +16,8 @@ def main(ctx: typer.Context):
     # Do not run when invoked with subcommands
     if ctx.invoked_subcommand is not None:
         return
-    console.print("[blue]logbook[/blue]")
-    console.print("Try running --help!")
+    display.notify("logbook", NotificationStyle.waffle)
+    display.notify("Try running --help!", NotificationStyle.hint)
 
 @app.command()
 def write(
@@ -32,18 +25,20 @@ def write(
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
     now = tk.makeISOTimeString(tk.getCurrentUTC())
+
     if tag is not None:
         if len(findTagDefinitions(name=tag)) == 0:
-            if display.confirm("[blue] It looks like that tag doesn't exist. Would you like to create it?", default=True) is True:
+            display.notify("It looks like that tag doesn't exist.")
+            if display.confirm(f"Would you like to create a new tag named {tag}?", default=True) is True:
                 subcommands.config.tag(TagAction.create, tag)
-                console.print(f"Created a new tag [blue]{tag}[/blue]")
+                display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
         writeLog(body, timestamp=now, tag=tag)
-        console.print("Wrote your log!")
     else:
         writeLog(body, timestamp=now)
-        console.print("Wrote your log!")
+
+    display.notify("Wrote your log!", NotificationStyle.assure)
 
 @app.command()
 def delete(
@@ -51,12 +46,14 @@ def delete(
 ):
     """Deletes logs in your logbook."""
     if not tags: # IMPORTANT; update when new filter type
-        if Confirm.ask("[red]It looks like you're trying to delete every single log in your logbook.[/red] Are you sure?", default=False):
+        display.notify("It looks like you're trying to delete every single log in your logbook.", NotificationStyle.warn) 
+        if display.confirm("Are you sure?", default=False):
             deleteAllLogs()
+            display.notify("All logs deleted.", NotificationStyle.assure)
     elif tags:
         for tag in tags:
             deleteLogsByTag(tag)
-        console.print("Done!")    
+        display.notify("Done!", NotificationStyle.assure)   
 
 app.add_typer(subcommands.config.app, name="config")
 app.add_typer(subcommands.read.app, name="read")
