@@ -1,5 +1,4 @@
-import subcommands.config, subcommands.read
-from subcommands.config import TagAction
+import subcommands.config, subcommands.read, subcommands.subcommands.config.tag
 import typer
 
 from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions, TagKind
@@ -33,7 +32,7 @@ def write(
         if len(findTagDefinitions(name=tag)) == 0:
             display.notify("It looks like that tag doesn't exist.")
             if display.confirm(f"Would you like to create a new tag named {tag}?", default=True) is True:
-                subcommands.config.tag(TagAction.create, tag)
+                subcommands.subcommands.config.tag.create(tag) # TODO: fix this cursedness
                 display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
