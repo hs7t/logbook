@@ -8,7 +8,8 @@ class NotificationStyle(str, Enum):
     neutral = "blue",
     waffle = "grey54",
     warn = "bold yellow",
-    assure = "green"
+    assure = "green",
+    hint = "yellow"
 
 
 def prompt(text, default=None, fade=False):
