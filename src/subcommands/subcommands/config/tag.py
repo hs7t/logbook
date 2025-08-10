@@ -61,6 +61,7 @@ def delete(
                     new_tag_exists = True
                 else:
                     display.notify("It looks like that tag doesn't exist.")
+        # TODO: add option to keep logs while deleting the tag
         else:
             display.notify("All logs related to this tag will be deleted", display.NotificationStyle.warn)
             if display.confirm("Are you sure?") is False:
