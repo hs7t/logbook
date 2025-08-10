@@ -26,6 +26,7 @@ def write(
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
     """Write logs to your logbook."""
+    
     now = tk.makeISOTimeString(tk.getCurrentUTC())
 
     if tag is not None:
@@ -36,14 +37,14 @@ def write(
                 display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
-        if findTagDefinitions(name='tag', kind=TagKind.stateful.value):
+        if findTagDefinitions(name='tag', kind=TagKind.stateful.value) and modifier is not None:
             writeLog(body, timestamp=now, tag=tag, stateModifier=modifier)
+        elif modifier is not None:
+            display.notify("This tag doesn't have a state.") # TODO: handle this case
         else:
             writeLog(body, timestamp=now, tag=tag)
     else:
         writeLog(body, timestamp=now)
-
-
 
     display.notify("Wrote your log!", NotificationStyle.assure)
 
