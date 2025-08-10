@@ -2,7 +2,7 @@ import subcommands.config, subcommands.read
 from subcommands.config import TagAction
 import typer
 
-from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions
+from interfaces.db import writeLog, deleteAllLogs, deleteLogsByTag, findTagDefinitions, TagKind
 import utilities.display as display
 from utilities.display import NotificationStyle
 import utilities.timekeeping as tk
@@ -22,6 +22,7 @@ def main(ctx: typer.Context):
 @app.command()
 def write(
     body: str = typer.Argument(help="Text for your log"),
+    modifier: Annotated[int|None, typer.Argument(help="A modifier for a tag state")] = None,
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
     """Write logs to your logbook."""
@@ -35,9 +36,14 @@ def write(
                 display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
-        writeLog(body, timestamp=now, tag=tag)
+        if findTagDefinitions(name='tag', kind=TagKind.stateful.value):
+            writeLog(body, timestamp=now, tag=tag, stateModifier=modifier)
+        else:
+            writeLog(body, timestamp=now, tag=tag)
     else:
         writeLog(body, timestamp=now)
+
+
 
     display.notify("Wrote your log!", NotificationStyle.assure)
 
@@ -50,11 +56,11 @@ def delete(
         display.notify("It looks like you're trying to delete every single log in your logbook.", NotificationStyle.warn) 
         if display.confirm("Are you sure?", default=False):
             deleteAllLogs()
-            display.notify("All logs deleted.", NotificationStyle.assure)
+            display.notify("Done! Deleted all logs.", NotificationStyle.assure)
     elif tags:
         for tag in tags:
             deleteLogsByTag(tag)
-        display.notify("Done!", NotificationStyle.assure)   
+        display.notify(f"Done! Deleted all logs with the tag{'s' if len(tags) > 1 else ''} you selected.", NotificationStyle.assure)   
 
 app.add_typer(subcommands.config.app, name="config")
 app.add_typer(subcommands.read.app, name="read")
