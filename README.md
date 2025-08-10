@@ -13,7 +13,7 @@ a computer!
 Logbook lets you write logs, like this:
 
 ```bash
-logbook write "Forgot my keys"
+logbook write "It's a sunny day!"
 ```
 
 Isn't that cool? You can also assign *tags* to them:
@@ -23,8 +23,8 @@ logbook write "Ate hotdog" --tag life
 logbook write "Forgot my keys" --tag lostitems
 ```
 
-Tags can have *states*: a tag's state is like a counter you add to and 
-substract from. You can change a state's value using a modifier, like this:
+Tags can have *states*: a tag's state is like a numeric value that you can
+increment and decrement using logs, like this:
 
 ```bash
 logbook write "Forgot my keys" -t lostitems +1
@@ -35,6 +35,8 @@ logbook write "Forgot my keys" -t lostitems +1
 ```bash
 logbook write "Stressed out because of exams" -t willtolive -10
 ```
+
+In other words, they're a bit like a counter!
 
 ### Reading from your logbook
 
