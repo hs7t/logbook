@@ -63,15 +63,15 @@ Logbook lets you write logs, like this:
 logbook write "It's a sunny day!"
 ```
 
-Isn't that cool? You can also assign *tags* to them:
+You can also assign *tags* to them:
 
 ```bash
 logbook write "Ate hotdog" --tag life
 logbook write "Forgot my keys" --tag lostitems
 ```
 
-Tags can have *states*: a tag's state is like a numeric value that you can
-increment and decrement using logs, like this:
+Tags can have *states*: a tag's state is a numeric value that you can increase 
+and decrease using logs, like so:
 
 ```bash
 logbook write "Forgot my keys" -t lostitems +1
@@ -89,7 +89,7 @@ In other words, they're a bit like a counter!
 
 #### `read logs`
 
-After writing some stuff to your logbook, you probably want to read it. To 
+You likely want to read what you've written to your logbook. To 
 get a table with the logs you've written, do:
 
 ```bash
