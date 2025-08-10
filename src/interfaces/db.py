@@ -47,7 +47,9 @@ def deleteTagDefinition(tag):
 
 def findTagDefinitions(**kwargs):
     return [match for match in tags.find(**kwargs)] # pyright: ignore[reportOptionalMemberAccess]
-    
+
+def fetchTagDefinitions():
+    return tags.all() # pyright: ignore[reportOptionalMemberAccess]
 
 # Logs
 
