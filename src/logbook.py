@@ -39,7 +39,7 @@ def write(
         if findTagDefinitions(name='tag', kind=TagKind.stateful.value) and modifier is not None:
             writeLog(body, timestamp=now, tag=tag, stateModifier=modifier)
         elif modifier is not None:
-            display.notify("This tag doesn't have a state.") # TODO: handle this case
+            display.notify("This tag doesn't support states.") # TODO: handle this case
         else:
             writeLog(body, timestamp=now, tag=tag)
     else:
