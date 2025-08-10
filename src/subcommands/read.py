@@ -25,13 +25,16 @@ def logs(
             logs.extend(findLogs(tag=tag))
     else:
         logs = fetchLogs()
+
+    sortedLogs = sorted(logs, key=lambda log: log["timestamp"], reverse=True)
+
     table = Table(box=box.ROUNDED)
 
     table.add_column("Time (YYYY-MM-DD)", justify="center", no_wrap=True)
     table.add_column("Text", justify="center", style="bright_green", no_wrap=False)
     table.add_column("Tag", justify="center")
 
-    for log in logs:
+    for log in sortedLogs:
         datetime_local = tk.convertToTimeZone(tk.makeDatetime(log['timestamp']), tk.getLocalTimeZone())
         time_local = tk.makeTimeString(datetime_local, format="%Y-%m-%d, %H:%M:%S")
         table.add_row(time_local, f'"{log['body']}"', log['tag'])
@@ -41,6 +44,7 @@ def logs(
 @app.command()
 def tags():
     tagDefs = fetchTagDefinitions()
+
     tagNames = [definition['name'] for definition in tagDefs]
     tagNames.sort()
 
