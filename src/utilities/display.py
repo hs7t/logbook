@@ -5,11 +5,14 @@ from enum import Enum
 console = Console()
 
 class NotificationStyle(str, Enum):
-    neutral = "blue",
-    waffle = "grey54",
-    warn = "bold yellow",
-    assure = "green",
+    neutral = "blue"
+    waffle = "grey54"
+    warn = "bold yellow"
+    assure = "green"
     hint = "yellow"
+
+    def __str__(self):
+        return self.value
 
 
 def prompt(text, default=None, fade=False):
