@@ -1,6 +1,5 @@
-from interfaces.db import createTagDefinition, findTagDefinitions, deleteTagDefinition, findLogs, changeLogTags, TagKind
 from interfaces.db import resetAppFolder
-import utilities.display as display
+import subcommands.subcommands.config.tag
 from enum import Enum
 
 import typer
@@ -9,54 +8,6 @@ from rich.console import Console
 console = Console()
 
 app = typer.Typer(help="Configure your logbook and other data.")
-
-class TagAction(str, Enum):
-    create = "create",
-    delete = "delete"
-
-@app.command()
-def tag(
-    action: TagAction = typer.Argument(help="An action to take"), 
-    tag_name: str = typer.Argument(help="A tag name"), 
-):
-    """
-    Configure tags.
-    """
-
-    if action == TagAction.create:
-        if len(findTagDefinitions(name=tag_name)) == 0:
-            createTagDefinition(tag_name, TagKind.static)
-            console.print(f"Tag {tag_name} created!")
-        else:
-            console.print(f"That tag, {tag_name}, already exists.")
-
-    if action == TagAction.delete:
-        if len(findTagDefinitions(name=tag_name)) == 0:
-            console.print("[blue]It looks like that tag doesn't exist.[/blue]")
-            raise typer.Exit()
-
-        if len(findLogs(tag=tag_name)) != 0:
-            if display.confirm("[bold red]This will update all logs related to this tag.[/bold red] Are you sure?", default=True) is False:
-                raise typer.Exit()
-
-            if display.confirm("Would you like to update related logs to use a different tag?", default=True):
-                new_tag_exists = False
-                while new_tag_exists is False:
-                    new_tag = display.prompt("Please input another tag to use", fade=True) or ""
-                    if len(findTagDefinitions(name=new_tag)) > 0 and new_tag != tag_name:
-                        changeLogTags(new_tag=new_tag, old_tag=tag_name)
-                        new_tag_exists = True
-                    else:
-                        console.print("[blue]It looks like that tag doesn't exist.[/blue]")
-            else:
-                if display.confirm("[bold red]All logs related to this tag will be deleted.[/bold red] Are you sure?", default=False) is False:
-                    raise typer.Exit()
-        else:
-            if display.confirm("[yellow]This tag will be deleted.[/yellow] Are you sure?", default=True) is False:
-                raise typer.Exit()
-        
-        deleteTagDefinition(tag_name)
-        console.print(f"Deleted the tag {tag_name}")
 
 class DataAction(str, Enum):
     delete = "delete"
@@ -72,3 +23,5 @@ def data(
         if typer.confirm("This will reset everything in your data folder, including your preferences and logbook. Are you sure?", default=False):
             resetAppFolder()
             console.print("Reset your logbook data folder.")
+
+app.add_typer(subcommands.subcommands.config.tag.app, name="tag")
