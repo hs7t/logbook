@@ -19,7 +19,7 @@ Binaries are available for three platforms:
   device is most likely to work with the x86_64 binary. If you're on an Apple Silicon 
   (M1, M2, M3...) Mac, choose the arm64 binary.
 
-> [!WARN]
+> [!IMPORTANT]
 > **If you're using Linux or Mac:** If you want to use `logbook` on Linux or your Mac, you 
   have to mark the binary you downloaded as an executable. From your terminal, run this 
   command:
