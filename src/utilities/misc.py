@@ -4,3 +4,6 @@ def calculateState(logs):
         state += (log.get('state', 0))
 
     return state
+
+def hasItems(list: list):
+    return bool(not (len(list) == 0))
