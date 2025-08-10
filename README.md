@@ -1,9 +1,9 @@
 # logbook
 
-logbook is simple CLI software that lets you log and tag events - as if you were 
+`logbook` is simple CLI software that lets you log and tag events - as if you were 
 a computer!
 
-## Installing logbook
+## Installing `logbook`
 
 ### 1. Download it
 
@@ -20,15 +20,15 @@ Binaries are available for three platforms:
   (M1, M2, M3...) Mac, choose the `arm64` binary.
 
 > [!IMPORTANT]
-> **If you're using Linux or Mac:** Before you can use logbook, you have to mark the 
+> **If you're using Linux or Mac:** Before you can use `logbook`, you have to mark the 
   binary you just downloaded as an executable. From your terminal, run `chmod +x BINARY-NAME`
   (for example, `chmod +x logbook-macos-arm64`).
 
 ### 2. Add logbook to your PATH
 
-This step is optional, but it's recommended as it allows you to use logbook from anywhere,
+This step is optional, but it's recommended as it allows you to use `logbook` from anywhere,
 
-1. Move the logbook binary into a stable folder.
+1. Move the `logbook` binary into a folder you don't plan to move or delete.
 2. Run a command appropriate for your OS:
     - macOS (zsh):
         ```bash
@@ -55,7 +55,7 @@ This step is optional, but it's recommended as it allows you to use logbook from
 
 ### Writing to your logbook
 
-Logbook lets you write logs, like this:
+`logbook write` lets you write logs, like this:
 
 ```bash
 logbook write "It's a sunny day!"
