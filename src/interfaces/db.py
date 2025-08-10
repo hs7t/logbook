@@ -29,6 +29,7 @@ class TagKind(str, Enum):
     static = "static"
     stateful = "stateful"
 
+
 def createTagDefinition(name, kind: TagKind = TagKind.static, cadence = None):
     """
     Creates a tag reference.
@@ -68,6 +69,7 @@ def writeLog(body: str, timestamp: str|None = None, tag: str|None = None, stateM
         body=body,
         tag=tag,
         timestamp=timestamp,
+        modifier=stateModifier
     ))
 
 def deleteAllLogs():
