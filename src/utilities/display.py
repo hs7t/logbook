@@ -15,25 +15,25 @@ class NotificationStyle(str, Enum):
         return self.value
 
 
-def prompt(text, default=None, fade=False):
-    style = ""
-    if fade is True:
+def prompt(text, default=None, fade=True):
+    if fade == True:
         style = NotificationStyle.waffle
-    text = f"[{style}]{text}[{style}]"
-
+        text = f"[{style}]{text}[{style}]"
     response = Prompt.ask(text, default=default)
     return response
 
 def confirm(text, default=False, fade = False):
-    style = ""
-    if fade is True:
+    if fade == True:
         style = NotificationStyle.waffle
-    text = f"[{style}]{text}[{style}]"
-
+        text = f"[{style}]{text}[{style}]"
     response = Confirm.ask(text, default=default)
     return response
 
-def notify(text, style: NotificationStyle|str = NotificationStyle.neutral):
+def notify(text, style: NotificationStyle|str|None = NotificationStyle.neutral):
     if style == NotificationStyle.hint:
         text = f"💡 {text}"
-    console.print(f"[{style}]{text}[/{style}]")
+
+    if style:
+        console.print(f"[{style}]{text}[/{style}]")
+    else:
+        console.print(text)
