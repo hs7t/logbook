@@ -21,10 +21,8 @@ Binaries are available for three platforms:
 
 > [!IMPORTANT]
 > **If you're using Linux or Mac:** Before you can use logbook, you have to mark the 
-  binary you just downloaded as an executable. From your terminal, run this command:
-  ```bash
-  chmod +x BINARY-NAME     # for example, logbook-macos-arm64
-  ```
+  binary you just downloaded as an executable. From your terminal, run `chmod +x BINARY-NAME`
+  (for example, `chmod +x logbook-macos-arm64`).
 
 ### 2. Add logbook to your PATH
 
