@@ -24,6 +24,7 @@ def write(
     body: str = typer.Argument(help="Text for your log"),
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
+    """Write logs to your logbook."""
     now = tk.makeISOTimeString(tk.getCurrentUTC())
 
     if tag is not None:
@@ -44,7 +45,7 @@ def write(
 def delete(
     tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag to delete items by")] = None,
 ):
-    """Deletes logs in your logbook."""
+    """Delete logs in your logbook."""
     if not tags: # IMPORTANT; update when new filter type
         display.notify("It looks like you're trying to delete every single log in your logbook.", NotificationStyle.warn) 
         if display.confirm("Are you sure?", default=False):
