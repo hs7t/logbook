@@ -1,7 +1,55 @@
 # logbook
 
-logbook is simple software that lets you log and tag events - as if you were 
+logbook is simple CLI software that lets you log and tag events - as if you were 
 a computer!
+
+## Installing logbook to your computer
+
+### 1. Download it
+
+Get a binary from the [Releases](https://github.com/hs7t/logbook/releases/) tab. 
+Binaries are available for three platforms:
+
+- for Windows: `logbook-windows-[x86_64 or arm64].exe`
+- for macOS: `logbook-macos-[arm64 or x86_64]`
+- for Linux (x86-64 / arm64): `logbook-linux-[x86_64 or arm64]`
+
+> [!TIP]
+> Don't know what x86_64 or arm64 mean? If you're running Windows or Linux, your
+  device is most likely to work with the x86_64 binary. If you're on an Apple Silicon 
+  (M1, M2, M3...) Mac, choose the arm64 binary.
+
+> [!WARN]
+> **If you're using Linux or Mac:** If you want to use `logbook` on Linux or your Mac, you 
+  have to mark the binary you downloaded as an executable. From your terminal, run this 
+  command:
+  ```bash
+  chmod +x logbook-linux     # or logbook-macos
+  ```
+
+### 2. Add logbook to your PATH
+
+This step is optional, but it's recommended as it allows you to use logbook from anywhere,
+
+1. Move the logbook binary into a stable folder.
+2. Run a command appropriate for your OS:
+    - macOS (zsh):
+        ```bash
+        export PATH="$PATH:/path/to/stable/folder"
+        source ~/.zshrc
+        ```
+    - Linux (bash):
+        ```bash
+        export PATH="$PATH:/path/to/stable/folder"
+        source ~/.bashrc    # or ~/.profile, depending on your shell
+        ```
+    - Windows (PowerShell)
+        ```powershell
+        [Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\path\to\stable\folder", "User")
+        ```
+> [!TIP]
+> You should rename the binary to `logbook` (or `logbook.exe` on Windows)
+  if you want to use it by just typing `logbook`.
 
 ## Using logbook
 
