@@ -52,7 +52,7 @@ def tag(
                 if display.confirm("[bold red]All logs related to this tag will be deleted.[/bold red] Are you sure?", default=False) is False:
                     raise typer.Exit()
         else:
-            if typer.confirm("[yellow]This tag will be deleted.[/yellow] Are you sure?", default=True) is False:
+            if display.confirm("[yellow]This tag will be deleted.[/yellow] Are you sure?", default=True) is False:
                 raise typer.Exit()
         
         deleteTagDefinition(tag_name)
