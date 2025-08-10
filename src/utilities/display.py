@@ -31,4 +31,6 @@ def confirm(text, default=False, fade = False):
     return response
 
 def notify(text, style: NotificationStyle|str = NotificationStyle.neutral):
+    if style == NotificationStyle.hint:
+        text = f"💡 {text}"
     console.print(f"[{style}]{text}[/{style}]")
