@@ -87,9 +87,9 @@ def fetchLogsObject():
 def findLogs(*args, **kwargs):
     return [match for match in logs.find(*args, **kwargs)] # pyright: ignore[reportOptionalMemberAccess]
 
-def changeLogTags(old_tag: str, new_tag: str):
+def changeLogTags(old_tag: str, new_tag: str|None):
     """
-    Changes the tag attribute to a new_tag for all logs using a certain old_tag
+    Changes the tag attribute to a new_tag|None for all logs using a certain old_tag
     """
 
     # I know this is bad code but it's the best workaround :(
