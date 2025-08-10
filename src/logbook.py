@@ -32,7 +32,10 @@ def write(
         if len(findTagDefinitions(name=tag)) == 0:
             display.notify("It looks like that tag doesn't exist.")
             if display.confirm(f"Would you like to create a new tag named {tag}?", default=True) is True:
-                subcommands.subcommands.config.tag.create(tag) # TODO: fix this cursedness
+                if modifier is not None:
+                    subcommands.subcommands.config.tag.create(tag, TagKind.stateful)
+                else:
+                    subcommands.subcommands.config.tag.create(tag) # TODO: fix this cursedness
                 display.notify(f"Created a new tag named {tag}.", NotificationStyle.assure)
             else:
                 raise typer.Exit()
