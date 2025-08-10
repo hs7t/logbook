@@ -1,4 +1,4 @@
-import subcommands.config
+import subcommands.config, subcommands.read
 import typer
 
 from rich.console import Console
@@ -8,7 +8,7 @@ from rich import box
 
 from interfaces.db import writeLog, fetchLogs, findLogs, deleteAllLogs, deleteLogsByTag, findTagDefinitions
 import utilities.display as display
-from utilities.timekeeping import getCurrentUTC, isoTimeString
+import utilities.timekeeping as tk
 from typing_extensions import Annotated
 from typing import List
 
@@ -30,7 +30,7 @@ def write(
     body: str = typer.Argument(help="Text for your log"),
     tag: Annotated[str|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
 ):
-    now = isoTimeString(getCurrentUTC())
+    now = tk.makeISOTimeString(tk.getCurrentUTC())
     if tag is not None:
         if len(findTagDefinitions(name=tag)) == 0:
             if display.confirm("[blue] It looks like that tag doesn't exist. Would you like to create it?", default=True) is True:
@@ -55,32 +55,10 @@ def delete(
     elif tags:
         for tag in tags:
             deleteLogsByTag(tag)
-        console.print("Done!")
-
-@app.command()
-def read(
-    amount: int = typer.Argument(10, help="The amount of logs to show"),
-    tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
-):
-    logs = []
-    if tags is not None:
-        for tag in tags:
-            logs.extend(findLogs(tag=tag))
-    else:
-        logs = fetchLogs()
-    table = Table(box=box.ROUNDED)
-
-    table.add_column("Timestamp", justify="center", style="bright_yellow", no_wrap=True)
-    table.add_column("Text", style="bright_green", no_wrap=False)
-    table.add_column("Tag", justify="center")
-
-    for log in logs:
-        table.add_row(log['timestamp'], f'"{log['body']}"', log['tag'])
-    
-    console.print(table)
-    
+        console.print("Done!")    
 
 app.add_typer(subcommands.config.app, name="config")
+app.add_typer(subcommands.read.app, name="read")
 
 if __name__ == "__main__":
     app()
