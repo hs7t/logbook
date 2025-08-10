@@ -1,4 +1,4 @@
-import subcommands.config
+from enum import Enum
 import typer
 
 from rich.console import Console
@@ -14,11 +14,21 @@ from typing import List
 console = Console()
 app = typer.Typer(help="Read your logbook.")
 
+class LogSortingOption(str, Enum):
+    # Sorting option -> table headers
+    time = "timestamp"
+    tag = "tag"
+    text = "text"
+
+    def __str__(self):
+        return self.value
+    
 @app.command()
 def logs(
     amount: int = typer.Argument(10, help="The amount of logs to show"),
     tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
-    descending: Annotated[bool, typer.Option("-d/-a", "--descending/ascending", help="Whether to order logs in descending order")] = True 
+    sortingOption: Annotated[LogSortingOption, typer.Option("-s", "--sort", help="How to sort logs")] = LogSortingOption.time,
+    descending: Annotated[bool, typer.Option("-d/-a", "--descending/--ascending", help="Whether to order logs in descending order")] = True 
 ):
     """Read logs in your logbook."""
 
@@ -29,7 +39,7 @@ def logs(
     else:
         logs = fetchLogs()
 
-    outputLogs = sorted(logs, key=lambda log: log["timestamp"], reverse=descending)
+    outputLogs = sorted(logs, key=lambda log: log[sortingOption], reverse=descending)
     outputLogs = outputLogs[:amount]
 
     table = Table(box=box.ROUNDED)
