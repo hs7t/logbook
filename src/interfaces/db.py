@@ -1,4 +1,5 @@
 import sqlite3, dataset
+from enum import Enum
 import os, shutil
 from pathlib import Path
 from typing import Any
@@ -24,8 +25,12 @@ tags = db['tags']
 logs = db['logs']
 
 # Tags
+class TagKind(str, Enum):
+    static = "static"
+    stateful = "stateful"
+    cadenced = "cadenced"
 
-def createTagDefinition(name, kind = 'static', cadence = None):
+def createTagDefinition(name, kind: TagKind = TagKind.static, cadence = None):
     """
     Creates a tag reference.
         name: the name for the tag (str)
@@ -35,9 +40,9 @@ def createTagDefinition(name, kind = 'static', cadence = None):
         name = name,
         kind = kind
     )
-    if kind == 'stateful':
+    if kind == TagKind.stateful:
         props['state'] = 0
-    if cadence != None:
+    if kind == TagKind.stateful and cadence != None:
         props['cadence'] = cadence
 
     tags.insert(props) # pyright: ignore[reportOptionalMemberAccess]
@@ -53,7 +58,7 @@ def fetchTagDefinitions():
 
 # Logs
 
-def writeLog(body: str, timestamp: str|None = None, tag: str|None = None):
+def writeLog(body: str, timestamp: str|None = None, tag: str|None = None, stateModifier: int|None = None):
     """
     Writes a log to the database.
         body: text (str)
