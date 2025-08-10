@@ -1,4 +1,4 @@
-from interfaces.db import createTagDefinition, findTagDefinitions, deleteTagDefinition, findLogs, changeLogTags
+from interfaces.db import createTagDefinition, findTagDefinitions, deleteTagDefinition, findLogs, changeLogTags, TagKind
 from interfaces.db import resetAppFolder
 import utilities.display as display
 from enum import Enum
@@ -25,7 +25,7 @@ def tag(
 
     if action == TagAction.create:
         if len(findTagDefinitions(name=tag_name)) == 0:
-            createTagDefinition(tag_name, 'static')
+            createTagDefinition(tag_name, TagKind.static)
             console.print(f"Tag {tag_name} created!")
         else:
             console.print(f"That tag, {tag_name}, already exists.")
