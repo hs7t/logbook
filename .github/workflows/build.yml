@@ -32,6 +32,8 @@ jobs:
       - name: Rename binaries
         run: |
           ls
+          ls dist/*
+          ls dist/
           tree
           if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             mv dist/pyinstaller/win_amd64/peek.exe dist/peek-windows-x86_64.exe
