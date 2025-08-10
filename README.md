@@ -92,8 +92,8 @@ logbook config tag create lostitems --tag-kind stateful
 If you don't want a tag anymore, you can delete it:
 
 ```bash
-logbook config tag delete carsseen
+logbook config tag delete carsseen  # deletes the tag 'carsseen'
 ```
 
 Of course, your old logs assigned to this tag will need to be updated! You can 
-choose what happens to them via the prompts `logbook` will ask you.
+choose what happens to them via the prompts `logbook` will give you.
