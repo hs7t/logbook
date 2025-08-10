@@ -18,6 +18,7 @@ app = typer.Typer(help="Configure your logbook and other data.")
 def logs(
     amount: int = typer.Argument(10, help="The amount of logs to show"),
     tags: Annotated[List[str]|None, typer.Option("-t", "--tag", help="A tag for your log")] = None,
+    descending: Annotated[bool, typer.Option("-d/-a", "--descending/ascending", help="Whether to order logs in descending order")] = True 
 ):
     logs = []
     if tags is not None:
@@ -26,7 +27,8 @@ def logs(
     else:
         logs = fetchLogs()
 
-    sortedLogs = sorted(logs, key=lambda log: log["timestamp"], reverse=True)
+    outputLogs = sorted(logs, key=lambda log: log["timestamp"], reverse=descending)
+    outputLogs = outputLogs[:amount]
 
     table = Table(box=box.ROUNDED)
 
@@ -34,7 +36,7 @@ def logs(
     table.add_column("Text", justify="center", style="bright_green", no_wrap=False)
     table.add_column("Tag", justify="center")
 
-    for log in sortedLogs:
+    for log in outputLogs:
         datetime_local = tk.convertToTimeZone(tk.makeDatetime(log['timestamp']), tk.getLocalTimeZone())
         time_local = tk.makeTimeString(datetime_local, format="%Y-%m-%d, %H:%M:%S")
         table.add_row(time_local, f'"{log['body']}"', log['tag'])
