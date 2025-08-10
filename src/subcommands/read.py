@@ -27,7 +27,7 @@ def logs(
         logs = fetchLogs()
     table = Table(box=box.ROUNDED)
 
-    table.add_column("Time (YYYY-MM-DD)", justify="center", style="bright_yellow", no_wrap=True)
+    table.add_column("Time (YYYY-MM-DD)", justify="center", no_wrap=True)
     table.add_column("Text", justify="center", style="bright_green", no_wrap=False)
     table.add_column("Tag", justify="center")
 
@@ -46,7 +46,7 @@ def tags():
 
     table = Table(box=box.ROUNDED)
 
-    table.add_column("Tag", justify="center")
+    table.add_column("Tag", justify="center", style="bright_green")
     table.add_column("Last logged (Y-M-D)")
 
     for tagName in tagNames:
