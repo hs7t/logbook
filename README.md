@@ -2,7 +2,8 @@
 
 `logbook` is simple CLI software that lets you log and tag events - as if you were 
 a computer!
-
+>[!IMPORTANT]
+>This project is a command line app. That means you should run it from your favourite terminal emulator!
 ## Installing `logbook`
 
 ### 1. Download it
