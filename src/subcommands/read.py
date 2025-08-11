@@ -67,7 +67,7 @@ def logs(
             time_local = tk.makeTimeString(datetime_local, format="%Y-%m-%d, %H:%M:%S")
 
             state_modifier_string = "-"
-            state_modifier = int(log["modifier"]) or 0
+            state_modifier = int(log["modifier"] or 0)
             if state_modifier > 0:
                 state_modifier_string = f"+{log["modifier"]}"
             if state_modifier < 0:
