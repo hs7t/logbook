@@ -56,15 +56,24 @@ def logs(
         table = Table(box=box.ROUNDED)
 
         table.add_column("Time (YYYY-MM-DD)", justify="center", no_wrap=True)
-        table.add_column("Text", justify="center", style="bright_green", no_wrap=False)
+        table.add_column("Text", style="bright_green", no_wrap=False)
         table.add_column("Tag", justify="center")
-        # TODO: add 'state' column
+        table.add_column("Modifier", justify="center")
+        # TODO: make headers dynamic
 
         task_processing = progress.add_task("Making a neat table...", total=len(outputLogs))
         for log in outputLogs:
             datetime_local = tk.convertToTimeZone(tk.makeDatetime(log['timestamp']), tk.getLocalTimeZone())
             time_local = tk.makeTimeString(datetime_local, format="%Y-%m-%d, %H:%M:%S")
-            table.add_row(time_local, f'"{log["body"]}"', log["tag"])
+
+            state_modifier_string = "-"
+            state_modifier = log["modifier"] or 0
+            if state_modifier > 0:
+                state_modifier_string = f"+{log["modifier"]}"
+            if state_modifier < 0:
+                state_modifier_string = f"-{log["modifier"]}"
+
+            table.add_row(time_local, f'"{log["body"]}"', log["tag"], state_modifier_string)
             progress.advance(task_processing)
     
     console.print(table)
